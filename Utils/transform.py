@@ -223,7 +223,7 @@ class Trackball:
 
     def rotate_easy(self, axis=(0, 1, 0), degrees=0.0, radians=None):
         """ Easy rotation. In order to be used by the viewer """
-        self.rotation = quaternion_mul(quaternion_from_axis_angle(axis, degrees, radians), self.rotation)
+        self.rotation = quaternion_mul(self.rotation, quaternion_from_axis_angle(axis, degrees, radians))
 
     def translate_easy(self, x=0.0, y=0.0, z=0.0):
         """ Easy translation. In order to be used by the viewer """
@@ -231,4 +231,15 @@ class Trackball:
         self.distance += -z
 
     def get_position(self):
+        """ Get the position """
         return vec(*self.pos2d, self.distance)
+
+    def reset_hard(self):
+        """ Re-Put to the center """
+        self.reset_rotation()
+        self.distance = 3
+        self.pos2d = vec(0.0, 0.0)
+
+    def reset_rotation(self):
+        """ Reset the rotation """
+        self.rotation = quaternion_from_euler(0, 0, 0, None)

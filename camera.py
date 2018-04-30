@@ -105,14 +105,22 @@ class Viewer(Node):
                 self.trackball.translate_easy(0, 0, 1)
             if key == glfw.KEY_S:
                 self.trackball.translate_easy(0, 0, -1)
-            if key == glfw.KEY_A:
-                self.trackball.rotate_easy((0, 1, 0), 2)
-            if key == glfw.KEY_D:
-                self.trackball.rotate_easy((0, 1, 0), -2)
-            if key == glfw.KEY_UP:
-                self.trackball.rotate_easy((1, 0, 0), -2)
             if key == glfw.KEY_DOWN:
+                self.trackball.translate_easy(0, 1, 0)
+            if key == glfw.KEY_UP:
+                self.trackball.translate_easy(0, -1, 0)
+            if key == glfw.KEY_A:
+                self.trackball.rotate_easy((0, 1, 0), -2)
+            if key == glfw.KEY_D:
+                self.trackball.rotate_easy((0, 1, 0), 2)
+            if key == glfw.KEY_LEFT:
+                self.trackball.rotate_easy((1, 0, 0), -2)
+            if key == glfw.KEY_RIGHT:
                 self.trackball.rotate_easy((1, 0, 0), 2)
+            if key == glfw.KEY_N:
+                self.trackball.reset_rotation()
+            if key == glfw.KEY_M:
+                self.trackball.reset_hard() 
             if key == glfw.KEY_E:
                 NodeStorage.get("cube1").translate(0, 0, -0.5)
             if key == glfw.KEY_R:
