@@ -4,59 +4,81 @@ from loader import ColorMesh
 import numpy as np
 import OpenGL.GL as GL
 from transform import (translate, rotate, scale, vec, frustum, perspective,
-                        identity, quaternion, quaternion_from_euler, lookat)
+                        identity, quaternion, quaternion_from_euler, lookat, quaternion_matrix,
+                        quaternion_mul, quaternion_from_axis_angle)
+from collections import defaultdict
 
 class Node:
     """ Scene graph transform and parameter broadcast node """
     number_subnodes = 0
-    def __init__(self, name='', transform=identity(), children=(), **param):
-        self.transform, self.param, self.name = transform, param, name
-        self.children = dict()
+    def __init__(self, name='', transform=None, children=(), \
+                translation_matrix=translate(), scale_matrix=scale(1), rotation_quaternion=quaternion(), axe=False, \
+                 **param):
+        # Set all the arguments
+        self.transform, self.param, self.name, \
+        self.translation_matrix, self.scale_matrix, self.rotation_quaternion = \
+        transform, param, name, translation_matrix, scale_matrix, rotation_quaternion
+        self.children = defaultdict(list)
         self.add(*children)
-        self.add(Axis())# Fait bugger le skinning
+        if(axe):
+            self.add(Axis())# Fait bugger le skinning
 
     def add(self, *drawables):
         """ Add drawables to this node, simply updating children list """
         for child in drawables:
             if(isinstance(child, Node)):
-                self.children.update({child.name : child})
+                if(child.name == ''):
+                    name = "NodeLocal"+str(Node.number_subnodes)
+                else:
+                    name = child.name
                 NodeStorage.add_node(child)
             else:
-                self.children.update({"ColorMeshLocal"+str(Node.number_subnodes) : child})
+                name = "ColorMeshLocal"+str(Node.number_subnodes)
                 NodeStorage.add_colormesh(child)
+            self.children[name].append(child)
             Node.number_subnodes += 1
 
     def draw(self, projection, view, model, **param):
         """ Recursive draw, passing down named parameters & model matrix. """
         # merge named parameters given at initialization with those given here
         param = dict(param, **self.param)
-        model =  model @ self.transform
-        for childname, child in self.children.items():
-            child.draw(projection, view, model, **param)
+        if(self.transform is None):
+            matrix_trs = self.translation_matrix @ quaternion_matrix(self.rotation_quaternion) @ self.scale_matrix
+            model =  model @ matrix_trs
+        else:
+            model = model @ self.transform
+
+        for child in self.children.values():
+            child[0].draw(projection, view, model, **param)
 
     def translate(self, x=0.0, y=0.0, z=0.0):
         """ Translate the node """
-        self.transform =  translate(x, y, z) @ self.transform
+        self.translation_matrix = translate(x, y, z) @ self.translation_matrix
 
     def scale(self, x, y=None, z=None):
         """ Scale the node """
-        self.transform = scale(x, y, z) @ self.transform
+        self.scale_matrix = scale(x, y, z) @ self.scale_matrix
 
     def rotate(self, axis=(1., 0., 0.), angle=0.0, radians=None):
         """ Rotate the node : warning, it's not using quaternion """
-        self.transform = rotate(axis, angle, radians) @ self.transform
+        # TODO : Verify the order of the multiplication
+        self.rotation_quaternion = quaternion_mul(self.rotation_quaternion, quaternion_from_axis_angle(axis, angle, radians))
 
     def set_global_position(self, x=0.0, y=0.0, z=0.0):
         """ Reset global position """
-        self.transform = translate(x, y , z)
+        self.translation_matrix = translate(x, y , z)
 
 class NodeStorage:
     """ HashMap to interact easily with all the nodes """
     nodes = dict()
-
+    # TODO : Use defaultdict if needed
     @staticmethod
     def add_node(node):
         """ Add one node """
+        if(node.name == ''):
+            name = "ColorMesh"+str(len(NodeStorage.nodes))
+        else:
+            name = node.name
         NodeStorage.nodes.update({node.name : node})
 
     @staticmethod
