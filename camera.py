@@ -17,7 +17,7 @@ from transform import (translate, rotate, scale, vec, frustum, perspective,
                         identity, quaternion, quaternion_from_euler, lookat)
 from Shader import Shader
 from loader import load
-from Node import Node, RotationControlNode, NodeStorage
+from Node import Node, RotationControlNode, NodeStorage, Axis
 from GLFWTrackball import GLFWTrackball
 from Node import Node
 from Keyframes import KeyFrames, TransformKeyFrames, KeyFrameControlNode
@@ -127,34 +127,15 @@ def main():
     """ create a window, add scene objects, then run rendering loop """
     viewer = Viewer()
     # cube = load_textured("Objects/skybox/skybox.obj")[0]
-    unCube = load("Objects/cube/cube.obj")[0]
+    cube_mesh = load("Objects/cube/cube.obj")[0]
     cube_node = Node("cube1");
-    cube_node.add(unCube)
+    cube_node_2 = Node("cube2", children=[cube_mesh]);
+    cube_node.add(cube_mesh)
     cube_node.set_global_position(2, 2, -2)
-    # cube_node_2 = Node("cube2");
-    # cube_node_2.add(unCube)
-    # cube_node_2.set_global_position(-1, 2, -2)
-    # cube_node_3 = Node("cube3");
-    # cube_node_3.add(unCube)
-    # cube_node_3.set_global_position(-1, -2, -2)
-    # cube_node_4 = Node("cube4");
-    # cube_node_4.add(unCube)
-    # cube_node_4.set_global_position(1, -2, -2)
-    # viewer.add(cylinder_node)
-    # WARNING : The arm use the same touchs
-    viewer.add(cube_node)
-    # viewer.add(TexturedPlane("Textures/grass.png"))
-    #unLapinAvecUneOmbre = LambertianMesh((1,0.3,0.5),(1,1,1),uri="Objects/bunny/bunny.obj")
-    #unLapin = load_textured("Objects/bunny/bunny.obj")[0]
-    #suzanne = load("Objects/suzanne.obj")[0]
-    #viewer.add(RotatingObject(unLapin, (0,0.5,0)))
-    #translate_keys = {0: vec(0, 0, 0), 2: vec(1, 1, 0), 4: vec(0, 0, 0)}
-    #rotate_keys = {0: quaternion(), 2: quaternion_from_euler(180, 45, 90),
-    #               3: quaternion_from_euler(180, 0, 180), 4: quaternion()}
-    #scale_keys = {0: 1, 2: 0.5, 4: 1,300:100}
-    #keynode = KeyFrameControlNode(translate_keys, rotate_keys, scale_keys)
-    #keynode.add(load("Objects/cylinder.obj")[0])
-    #viewer.add(keynode)
+    cube_node.set_global_rotation((0, 1, 0), -40)
+    cube_node.set_global_scale(.5, .5, .5)
+    viewer.add(cube_node, cube_node_2, Axis())
+
 
     # start rendering loop
     viewer.run()

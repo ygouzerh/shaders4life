@@ -43,8 +43,7 @@ class Node:
         # merge named parameters given at initialization with those given here
         param = dict(param, **self.param)
         if(self.transform is None):
-            matrix_trs = self.translation_matrix @ quaternion_matrix(self.rotation_quaternion) @ self.scale_matrix
-            model =  model @ matrix_trs
+            model =  model @ self.get_trs_matrix()
         else:
             model = model @ self.transform
 
@@ -67,6 +66,18 @@ class Node:
     def set_global_position(self, x=0.0, y=0.0, z=0.0):
         """ Reset global position """
         self.translation_matrix = translate(x, y , z)
+
+    def set_global_rotation(self, axis=(1., 0., 0.), angle=0.0, radians=None):
+        """ Reset global rotation """
+        self.rotation_quaternion = quaternion_from_axis_angle(axis, angle, radians)
+
+    def set_global_scale(self, x, y=None, z=None):
+        """ Reset global scale """
+        self.scale_matrix = scale(x, y, z)
+
+    def get_trs_matrix(self):
+        """ Get TRS matrix """
+        return self.translation_matrix @ quaternion_matrix(self.rotation_quaternion) @ self.scale_matrix
 
 class NodeStorage:
     """ HashMap to interact easily with all the nodes """
