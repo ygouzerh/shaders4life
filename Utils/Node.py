@@ -59,6 +59,10 @@ class Node:
         """ Scale the node """
         self.scale_matrix = scale(x, y, z) @ self.scale_matrix
 
+    def scale_total(self, value):
+        """ Wrapper for min or max all the shape """
+        self.scale(value, value, value)
+
     def rotate(self, axis=(1., 0., 0.), angle=0.0, radians=None):
         """ Rotate the node : warning, it's not using quaternion """
         # TODO : Verify the order of the multiplication

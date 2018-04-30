@@ -9,7 +9,6 @@ import sys
 sys.path.append('./Shaders')
 from ShaderPos import COLOR_VERT_POS, COLOR_FRAG_POS
 
-
 # -------------- 3D ressource loader -----------------------------------------
 def load(file):
     """ load resources from file using pyassimp, return list of ColorMesh """

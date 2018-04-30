@@ -122,7 +122,8 @@ class Viewer(Node):
 def main():
     """ create a window, add scene objects, then run rendering loop """
     viewer = Viewer()
-    viewer.add(MapCube.create())
+    world = Map(60, 60, 60)
+    viewer.add(world.create())
     viewer.run()
 
 
