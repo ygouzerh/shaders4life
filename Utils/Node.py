@@ -47,8 +47,9 @@ class Node:
         else:
             model = model @ self.transform
 
-        for child in self.children.values():
-            child[0].draw(projection, view, model, **param)
+        for childes in self.children.values():
+            for child in childes:
+                child.draw(projection, view, model, **param)
 
     def translate(self, x=0.0, y=0.0, z=0.0):
         """ Translate the node """

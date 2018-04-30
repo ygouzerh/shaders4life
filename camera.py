@@ -5,6 +5,7 @@ Python OpenGL practical application.
 # Python built-in modules
 import os                           # os function, i.e. checking file status
 import sys
+import json
 
 # External, non built-in modules
 import OpenGL.GL as GL              # standard Python OpenGL wrapper
@@ -15,6 +16,7 @@ from itertools import cycle
 sys.path.append('./Utils')
 from transform import (translate, rotate, scale, vec, frustum, perspective,
                         identity, quaternion, quaternion_from_euler, lookat)
+from world import MapCube, Map
 from Shader import Shader
 from loader import load
 from Node import Node, RotationControlNode, NodeStorage, Axis
@@ -116,28 +118,11 @@ class Viewer(Node):
             if key == glfw.KEY_R:
                 NodeStorage.get("cube1").rotate((0, 0, 1), 2)
 
-
-
-
-
-
-
 # -------------- main program and scene setup --------------------------------
 def main():
     """ create a window, add scene objects, then run rendering loop """
     viewer = Viewer()
-    # cube = load_textured("Objects/skybox/skybox.obj")[0]
-    cube_mesh = load("Objects/cube/cube.obj")[0]
-    cube_node = Node("cube1");
-    cube_node_2 = Node("cube2", children=[cube_mesh]);
-    cube_node.add(cube_mesh)
-    cube_node.set_global_position(2, 2, -2)
-    cube_node.set_global_rotation((0, 1, 0), -40)
-    cube_node.set_global_scale(.5, .5, .5)
-    viewer.add(cube_node, cube_node_2, Axis())
-
-
-    # start rendering loop
+    viewer.add(MapCube.create())
     viewer.run()
 
 
