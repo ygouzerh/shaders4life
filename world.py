@@ -72,7 +72,9 @@ class Map:
 
     def create(self):
         top_node = Node('top')
-        top_node.add(self.skybox(), self.simple_ground(), self.trex())
+        mesh_trex = load_textured("Objects/trex/trex.obj")[0]
+        trex_one = Node("trex_one", children=[mesh_trex])
+        top_node.add(self.skybox(), self.simple_ground(), self.trex(), trex_one)
         return top_node
 
 class MapCube:

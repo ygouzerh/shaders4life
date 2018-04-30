@@ -117,14 +117,17 @@ class Viewer(Node):
                 self.trackball.rotate_easy((1, 0, 0), -2)
             if key == glfw.KEY_RIGHT:
                 self.trackball.rotate_easy((1, 0, 0), 2)
+            if key == glfw.KEY_B:
+                trex_one = NodeStorage.get("trex_one")
+                trex_one.transform = self.trackball.view_matrix()
             if key == glfw.KEY_N:
                 self.trackball.reset_rotation()
             if key == glfw.KEY_M:
-                self.trackball.reset_hard() 
+                self.trackball.reset_hard()
             if key == glfw.KEY_E:
-                NodeStorage.get("cube1").translate(0, 0, -0.5)
+                NodeStorage.get("trex_one").translate(0, 0, -0.5)
             if key == glfw.KEY_R:
-                NodeStorage.get("cube1").rotate((0, 0, 1), 2)
+                NodeStorage.get("trex_one").rotate((0, 0, 1), 2)
 
 # -------------- main program and scene setup --------------------------------
 def main():
