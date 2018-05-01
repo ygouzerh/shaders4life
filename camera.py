@@ -5,6 +5,7 @@ Python OpenGL practical application.
 # Python built-in modules
 import os                           # os function, i.e. checking file status
 import sys
+import json
 
 # External, non built-in modules
 import OpenGL.GL as GL              # standard Python OpenGL wrapper
@@ -15,9 +16,10 @@ from itertools import cycle
 sys.path.append('./Utils')
 from transform import (translate, rotate, scale, vec, frustum, perspective,
                         identity, quaternion, quaternion_from_euler, lookat)
+from world import MapCube, Map
 from Shader import Shader
 from loader import load
-from Node import Node, RotationControlNode, NodeStorage
+from Node import Node, RotationControlNode, NodeStorage, Axis
 from GLFWTrackball import GLFWTrackball
 from Node import Node
 from Keyframes import KeyFrames, TransformKeyFrames, KeyFrameControlNode
@@ -103,60 +105,36 @@ class Viewer(Node):
                 self.trackball.translate_easy(0, 0, 1)
             if key == glfw.KEY_S:
                 self.trackball.translate_easy(0, 0, -1)
-            if key == glfw.KEY_A:
-                self.trackball.rotate_easy((0, 1, 0), 2)
-            if key == glfw.KEY_D:
-                self.trackball.rotate_easy((0, 1, 0), -2)
-            if key == glfw.KEY_UP:
-                self.trackball.rotate_easy((1, 0, 0), -2)
             if key == glfw.KEY_DOWN:
+                self.trackball.translate_easy(0, 1, 0)
+            if key == glfw.KEY_UP:
+                self.trackball.translate_easy(0, -1, 0)
+            if key == glfw.KEY_A:
+                self.trackball.rotate_easy((0, 1, 0), -2)
+            if key == glfw.KEY_D:
+                self.trackball.rotate_easy((0, 1, 0), 2)
+            if key == glfw.KEY_LEFT:
+                self.trackball.rotate_easy((1, 0, 0), -2)
+            if key == glfw.KEY_RIGHT:
                 self.trackball.rotate_easy((1, 0, 0), 2)
+            if key == glfw.KEY_B:
+                trex_one = NodeStorage.get("trex_one")
+                trex_one.transform = self.trackball.view_matrix()
+            if key == glfw.KEY_N:
+                self.trackball.reset_rotation()
+            if key == glfw.KEY_M:
+                self.trackball.reset_hard()
             if key == glfw.KEY_E:
-                NodeStorage.get("cube1").translate(0, 0, -0.5)
+                NodeStorage.get("trex_one").translate(0, 0, -0.5)
             if key == glfw.KEY_R:
-                NodeStorage.get("cube1").rotate((0, 0, 1), 2)
-
-
-
-
-
-
+                NodeStorage.get("trex_one").rotate((0, 0, 1), 2)
 
 # -------------- main program and scene setup --------------------------------
 def main():
     """ create a window, add scene objects, then run rendering loop """
     viewer = Viewer()
-    # cube = load_textured("Objects/skybox/skybox.obj")[0]
-    unCube = load("Objects/cube/cube.obj")[0]
-    cube_node = Node("cube1");
-    cube_node.add(unCube)
-    cube_node.set_global_position(2, 2, -2)
-    # cube_node_2 = Node("cube2");
-    # cube_node_2.add(unCube)
-    # cube_node_2.set_global_position(-1, 2, -2)
-    # cube_node_3 = Node("cube3");
-    # cube_node_3.add(unCube)
-    # cube_node_3.set_global_position(-1, -2, -2)
-    # cube_node_4 = Node("cube4");
-    # cube_node_4.add(unCube)
-    # cube_node_4.set_global_position(1, -2, -2)
-    # viewer.add(cylinder_node)
-    # WARNING : The arm use the same touchs
-    viewer.add(cube_node)
-    # viewer.add(TexturedPlane("Textures/grass.png"))
-    #unLapinAvecUneOmbre = LambertianMesh((1,0.3,0.5),(1,1,1),uri="Objects/bunny/bunny.obj")
-    #unLapin = load_textured("Objects/bunny/bunny.obj")[0]
-    #suzanne = load("Objects/suzanne.obj")[0]
-    #viewer.add(RotatingObject(unLapin, (0,0.5,0)))
-    #translate_keys = {0: vec(0, 0, 0), 2: vec(1, 1, 0), 4: vec(0, 0, 0)}
-    #rotate_keys = {0: quaternion(), 2: quaternion_from_euler(180, 45, 90),
-    #               3: quaternion_from_euler(180, 0, 180), 4: quaternion()}
-    #scale_keys = {0: 1, 2: 0.5, 4: 1,300:100}
-    #keynode = KeyFrameControlNode(translate_keys, rotate_keys, scale_keys)
-    #keynode.add(load("Objects/cylinder.obj")[0])
-    #viewer.add(keynode)
-
-    # start rendering loop
+    world = Map(60, 60, 60)
+    viewer.add(world.create())
     viewer.run()
 
 
