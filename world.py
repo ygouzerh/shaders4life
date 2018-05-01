@@ -54,6 +54,13 @@ class Map:
         nodes_trex = Node("all_trex", children=self.generate_nodes(mesh_trex, 10))
         return nodes_trex
 
+    def tree(self):
+        """ Generate trees """
+        mesh_tree = load("Objects/tree/lowpolytree.obj")[0]
+        nodes_tree = Node("forest", children=self.generate_nodes(mesh_tree, 10))
+        nodes_tree.scale_total(4)
+        return nodes_tree
+
     def simple_ground(self):
         """ Load a simple ground """
         ground_mesh = TexturedPlane("Objects/ground/moss.jpg")
@@ -74,7 +81,7 @@ class Map:
         top_node = Node('top')
         mesh_trex = load_textured("Objects/trex/trex.obj")[0]
         trex_one = Node("trex_one", children=[mesh_trex])
-        top_node.add(self.skybox(), self.simple_ground(), self.trex(), trex_one)
+        top_node.add(self.skybox(), self.simple_ground(), self.tree(), self.trex(), trex_one)
         return top_node
 
 class MapCube:
