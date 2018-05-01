@@ -51,6 +51,7 @@ def perspective(fovy, aspect, near, far):
     sx, sy = _scale / aspect, _scale
     zz = (far + near) / (near - far)
     zw = 2 * far * near/(near - far)
+    print("near  {} far {}".format(near, far))
     return np.array([[sx, 0,  0,  0],
                      [0,  sy, 0,  0],
                      [0,  0, zz, zw],
@@ -202,7 +203,7 @@ class Trackball:
 
     def projection_matrix(self, winsize):
         """ Projection matrix with z-clipping range adaptive to distance """
-        z_range = vec(0.1, 100) * self.distance  # proportion to dist
+        z_range = vec(0.1, 100) * abs(self.distance)  # proportion to dist
         return perspective(35, winsize[0] / winsize[1], *z_range)
 
     def matrix(self):
@@ -223,7 +224,7 @@ class Trackball:
 
     def rotate_easy(self, axis=(0, 1, 0), degrees=0.0, radians=None):
         """ Easy rotation. In order to be used by the viewer """
-        self.rotation = quaternion_mul(self.rotation, quaternion_from_axis_angle(axis, degrees, radians))
+        self.rotation = quaternion_mul(quaternion_from_axis_angle(axis, degrees, radians), self.rotation)
 
     def translate_easy(self, x=0.0, y=0.0, z=0.0):
         """ Easy translation. In order to be used by the viewer """
