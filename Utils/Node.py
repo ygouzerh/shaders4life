@@ -12,13 +12,15 @@ class Node:
     """ Scene graph transform and parameter broadcast node """
     number_subnodes = 0
     def __init__(self, name='', transform=None, children=(), \
-                translation_matrix=translate(), scale_matrix=scale(1), rotation_quaternion=quaternion(), axe=False, \
+                translation_matrix=translate(), scale_matrix=scale(1), rotation_quaternion=quaternion(), axe=False,
+                height_ground=0, \
                  **param):
         # Set all the arguments
         self.transform, self.param, self.name, \
         self.translation_matrix, self.scale_matrix, self.rotation_quaternion = \
         transform, param, name, translation_matrix, scale_matrix, rotation_quaternion
         self.children = defaultdict(list)
+        self.height_ground = height_ground
         self.add(*children)
         if(axe):
             self.add(Axis())# Fait bugger le skinning
@@ -37,6 +39,10 @@ class Node:
                 NodeStorage.add_colormesh(child)
             self.children[name].append(child)
             Node.number_subnodes += 1
+
+    def set_height_ground(self, height_ground):
+        """ Setter for height ground """
+        self.height_ground = height_ground
 
     def draw(self, projection, view, model, **param):
         """ Recursive draw, passing down named parameters & model matrix. """
@@ -82,7 +88,19 @@ class Node:
 
     def get_trs_matrix(self):
         """ Get TRS matrix """
-        return self.translation_matrix @ quaternion_matrix(self.rotation_quaternion) @ self.scale_matrix
+        return translate(0, self.height_ground, 0) @ self.translation_matrix @ quaternion_matrix(self.rotation_quaternion) @ self.scale_matrix
+
+    def get_x(self):
+        """ Return the x coordinates """
+        return self.translation_matrix[0][3]
+
+    def get_y(self):
+        """ Return the y coordinates"""
+        return self.translation_matrix[1][3]
+
+    def get_z(self):
+        """ Return the z coordinates"""
+        return self.translation_matrix[2][3]
 
 class NodeStorage:
     """ HashMap to interact easily with all the nodes """

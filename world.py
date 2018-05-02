@@ -9,6 +9,7 @@ from loader import load
 from Textures import load_textured, TexturedPlane
 from random import randrange, randint, choice
 import OpenGL.GL as GL
+from terrain import Terrain
 
 """
 Map to define all the nodes used in the world
@@ -21,6 +22,19 @@ class Map:
         self.map_width = map_width
         self.map_height = map_height
         self.map_depth = map_depth
+        self.terrain = Terrain("Objects/ground/heightmap.png", light_direction=(50000, 500, 500), translate_y=-150, translate_x=-600, translate_z=-800, scale_total=20)
+
+    def elevate(self, node):
+        """ Elevate the node to be on the terrain """
+        # print("#")
+        # print("On va elever : ({}, {})".format(node.get_x(),node.get_z()))
+        new_height = self.terrain.find_height(node.get_x(), node.get_z())
+        # print("Height = ", new_height)
+        node.set_height_ground(new_height)
+
+    def move(self, node):
+        new_position = self.terrain.find_position(node.get_x(), node.get_z())
+        node.set_global_position(*new_position)
 
     def generate_nodes(self, mesh, number, rotation_max=360, axis_rotation=(0, 1, 0), axis_translation=(1, 0, 1)):
         """
@@ -48,6 +62,11 @@ class Map:
                         axis_translation[1]*randint(-self.map_height, self.map_height), \
                         axis_translation[2]*randint(-self.map_depth, self.map_depth))
 
+        # If the user hasn't defined an y translation ,we elevate the node
+        if (axis_translation[1] == 0):
+            self.elevate(node)
+            # self.move(node)
+
     def trex(self):
         """ Generate the trex """
         mesh_trex = load_textured("Objects/trex/trex.obj")[0]
@@ -73,15 +92,17 @@ class Map:
         """ Create the skybox """
         mesh_skybox = load_textured("Objects/skybox/skybox.obj")[0]
         node_skybox = Node("skybox", children=[mesh_skybox])
+        node_skybox.translate(x=1, y=-100)
         node_skybox.rotate((1, 0, 0), -90)
-        node_skybox.scale_total(10)
+        node_skybox.scale_total(25)
         return node_skybox
 
     def create(self):
         top_node = Node('top')
         mesh_trex = load_textured("Objects/trex/trex.obj")[0]
         trex_one = Node("trex_one", children=[mesh_trex])
-        top_node.add(self.skybox(), self.simple_ground(), self.tree(), self.trex(), trex_one)
+        self.elevate(trex_one)
+        top_node.add(self.skybox(), self.terrain, self.tree(), self.trex(), trex_one)
         return top_node
 
 class MapCube:

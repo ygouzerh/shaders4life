@@ -51,7 +51,6 @@ def perspective(fovy, aspect, near, far):
     sx, sy = _scale / aspect, _scale
     zz = (far + near) / (near - far)
     zw = 2 * far * near/(near - far)
-    print("near  {} far {}".format(near, far))
     return np.array([[sx, 0,  0,  0],
                      [0,  sy, 0,  0],
                      [0,  0, zz, zw],
