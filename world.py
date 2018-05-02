@@ -26,10 +26,10 @@ class Map:
 
     def elevate(self, node):
         """ Elevate the node to be on the terrain """
-        print("#")
-        print("On va elever : ({}, {})".format(node.get_x(),node.get_z()))
+        # print("#")
+        # print("On va elever : ({}, {})".format(node.get_x(),node.get_z()))
         new_height = self.terrain.find_height(node.get_x(), node.get_z())
-        print("Height = ", new_height)
+        # print("Height = ", new_height)
         node.set_height_ground(new_height)
 
     def move(self, node):

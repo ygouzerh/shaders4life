@@ -320,9 +320,9 @@ class Terrain(Node):
         z_index = bisect_left(self.z_terrain, z)
         x_finded = self.x_terrain[x_index+1]
         z_finded = self.z_terrain[z_index+1]
-        print("x_finded, z_finded = ({}, {})".format(x_finded, z_finded))
-        print("array x : ", self.x_terrain[x_index-1:x_index+2])
-        print("array z : ", self.z_terrain[z_index-1:z_index+2])
+        # print("x_finded, z_finded = ({}, {})".format(x_finded, z_finded))
+        # print("array x : ", self.x_terrain[x_index-1:x_index+2])
+        # print("array z : ", self.z_terrain[z_index-1:z_index+2])
         return self.height_for_2d_position.get((x_finded, z_finded))
 
     def find_position(self, x, z):
@@ -330,9 +330,9 @@ class Terrain(Node):
         z_index = bisect_left(self.z_terrain, z)
         x_finded = self.x_terrain[x_index+1]
         z_finded = self.z_terrain[z_index+1]
-        print("x_finded, z_finded = ({}, {})".format(x_finded, z_finded))
-        print("array x : ", self.x_terrain[x_index-1:x_index+2])
-        print("array z : ", self.z_terrain[z_index-1:z_index+2])
+        # print("x_finded, z_finded = ({}, {})".format(x_finded, z_finded))
+        # print("array x : ", self.x_terrain[x_index-1:x_index+2])
+        # print("array z : ", self.z_terrain[z_index-1:z_index+2])
         return (x_finded, self.height_for_2d_position.get((x_finded, z_finded)), z_finded)
 
     def draw(self, projection, view, model, **param):
