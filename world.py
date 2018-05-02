@@ -22,6 +22,19 @@ class Map:
         self.map_width = map_width
         self.map_height = map_height
         self.map_depth = map_depth
+        self.terrain = Terrain("Objects/ground/heightmap.png", light_direction=(50000, 500, 500), translate_y=-150, translate_x=-600, translate_z=-800, scale_total=20)
+
+    def elevate(self, node):
+        """ Elevate the node to be on the terrain """
+        print("#")
+        print("On va elever : ({}, {})".format(node.get_x(),node.get_z()))
+        new_height = self.terrain.find_height(node.get_x(), node.get_z())
+        print("Height = ", new_height)
+        node.set_height_ground(new_height)
+
+    def move(self, node):
+        new_position = self.terrain.find_position(node.get_x(), node.get_z())
+        node.set_global_position(*new_position)
 
     def generate_nodes(self, mesh, number, rotation_max=360, axis_rotation=(0, 1, 0), axis_translation=(1, 0, 1)):
         """
@@ -49,16 +62,10 @@ class Map:
                         axis_translation[1]*randint(-self.map_height, self.map_height), \
                         axis_translation[2]*randint(-self.map_depth, self.map_depth))
 
-    def terrain(self):
-        """
-            Add terrain
-        """
-        terrain = Terrain("Objects/ground/heightmap.png", light_direction=(50000, 500, 500))
-        terrain_node = Node("terrain", children=[terrain])
-        terrain_node.translate(x=-500, y=-120, z=-800)
-        terrain_node.scale_total(5)
-        terrain_node.scale(x=2)
-        return terrain_node
+        # If the user hasn't defined an y translation ,we elevate the node
+        if (axis_translation[1] == 0):
+            self.elevate(node)
+            # self.move(node)
 
     def trex(self):
         """ Generate the trex """
@@ -94,7 +101,8 @@ class Map:
         top_node = Node('top')
         mesh_trex = load_textured("Objects/trex/trex.obj")[0]
         trex_one = Node("trex_one", children=[mesh_trex])
-        top_node.add(self.skybox(), self.terrain(), self.tree(), self.trex(), trex_one)
+        self.elevate(trex_one)
+        top_node.add(self.skybox(), self.terrain, self.tree(), self.trex(), trex_one)
         return top_node
 
 class MapCube:

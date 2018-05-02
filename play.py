@@ -33,7 +33,7 @@ from ShaderPos import COLOR_VERT_POS, COLOR_FRAG_POS
 class Viewer(Node):
     """ GLFW viewer window, with classic initialization & graphics loop """
 
-    def __init__(self, width=640, height=480):
+    def __init__(self, width=640, height=480, map_width=60, map_height=60, map_depth=60):
         # version hints: create GL window with >= OpenGL 3.3 and core profile
         glfw.window_hint(glfw.CONTEXT_VERSION_MAJOR, 3)
         glfw.window_hint(glfw.CONTEXT_VERSION_MINOR, 3)
@@ -41,7 +41,8 @@ class Viewer(Node):
         glfw.window_hint(glfw.OPENGL_PROFILE, glfw.OPENGL_CORE_PROFILE)
         glfw.window_hint(glfw.RESIZABLE, False)
         self.win = glfw.create_window(width, height, 'Viewer', None, None)
-
+        glfw.maximize_window(self.win)
+        # self.add(self.terrain.create())
         # make win's OpenGL context current; no OpenGL calls can happen before
         glfw.make_context_current(self.win)
 
@@ -62,7 +63,6 @@ class Viewer(Node):
 
         # initially empty list of object to draw
         self.drawables = []
-
         self.trackball = GLFWTrackball(self.win)
         self.fill_modes = cycle([GL.GL_LINE, GL.GL_POINT, GL.GL_FILL])
         GL.glEnable(GL.GL_DEPTH_TEST) #Maxime t
@@ -71,6 +71,8 @@ class Viewer(Node):
         self.x = 0
         self.y = 0
         self.z = 10
+        self.terrain = Map(map_width, map_height, map_depth)
+        self.add(self.terrain.create())
 
     def run(self):
         """ Main render loop for this OpenGL window """
@@ -124,15 +126,25 @@ class Viewer(Node):
                 self.trackball.reset_hard()
             if key == glfw.KEY_E:
                 NodeStorage.get("trex_one").translate(0, 0, -0.5)
+                self.terrain.elevate(NodeStorage.get("trex_one"))
             if key == glfw.KEY_R:
                 NodeStorage.get("trex_one").rotate((0, 0, 1), 2)
+                self.terrain.elevate(NodeStorage.get("trex_one"))
+
+    def set_terrain(self, terrain):
+        """
+            Set the terrain
+            Warning : do immediately after the initialization.
+            Not before because to create the map we need first to create
+            the viewer
+        """
+        self.terrain = terrain
 
 # -------------- main program and scene setup --------------------------------
 def main():
     """ create a window, add scene objects, then run rendering loop """
-    viewer = Viewer()
-    world = Map(60, 60, 60)
-    viewer.add(world.create())
+    viewer = Viewer(map_width=60, map_height=60, map_depth=60)
+    viewer.add()
     viewer.run()
 
 
