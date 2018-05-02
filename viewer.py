@@ -100,7 +100,6 @@ def main():
 
     skybox = load_textured("Objects/skybox/skybox.obj")[0]
     viewer.add(skybox)
-    
 
     viewer.add(Gate("test",1))
     viewer.run()

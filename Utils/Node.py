@@ -130,15 +130,15 @@ class NodeStorage:
         return NodeStorage.nodes.get(name)
 
 class RotationControlNode(Node):
-    def __init__(self, key_up, key_down, axis, angle=0, **param):
+    def __init__(self, key_up, key_down, axis, angle=0, speed=1, **param):
         super().__init__(**param)   # forward base constructor named arguments
-        self.angle, self.axis = angle, axis
+        self.angle, self.axis,self.speed = angle, axis,speed
         self.key_up, self.key_down = key_up, key_down
 
     def draw(self, projection, view, model, win=None, **param):
         assert win is not None
-        self.angle += 2 * int(glfw.get_key(win, self.key_up) == glfw.PRESS)
-        self.angle -= 2 * int(glfw.get_key(win, self.key_down) == glfw.PRESS)
+        self.angle += self.speed * int(glfw.get_key(win, self.key_up) == glfw.PRESS)
+        self.angle -= self.speed * int(glfw.get_key(win, self.key_down) == glfw.PRESS)
         self.transform = rotate(self.axis, self.angle)
 
         # call Node's draw method to pursue the hierarchical tree calling
