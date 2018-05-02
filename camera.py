@@ -29,8 +29,6 @@ from Textures import TexturedPlane, load_textured
 sys.path.append('./Shaders')
 from ShaderPos import COLOR_VERT_POS, COLOR_FRAG_POS
 
-
-
 # ------------  Viewer class & window management ------------------------------
 class Viewer(Node):
     """ GLFW viewer window, with classic initialization & graphics loop """

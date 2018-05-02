@@ -9,6 +9,7 @@ from loader import load
 from Textures import load_textured, TexturedPlane
 from random import randrange, randint, choice
 import OpenGL.GL as GL
+from terrain import Terrain
 
 """
 Map to define all the nodes used in the world
@@ -48,6 +49,17 @@ class Map:
                         axis_translation[1]*randint(-self.map_height, self.map_height), \
                         axis_translation[2]*randint(-self.map_depth, self.map_depth))
 
+    def terrain(self):
+        """
+            Add terrain
+        """
+        terrain = Terrain("Objects/ground/heightmap.png", light_direction=(50000, 500, 500))
+        terrain_node = Node("terrain", children=[terrain])
+        terrain_node.translate(x=-500, y=-120, z=-800)
+        terrain_node.scale_total(5)
+        terrain_node.scale(x=2)
+        return terrain_node
+
     def trex(self):
         """ Generate the trex """
         mesh_trex = load_textured("Objects/trex/trex.obj")[0]
@@ -73,15 +85,16 @@ class Map:
         """ Create the skybox """
         mesh_skybox = load_textured("Objects/skybox/skybox.obj")[0]
         node_skybox = Node("skybox", children=[mesh_skybox])
+        node_skybox.translate(x=1, y=-100)
         node_skybox.rotate((1, 0, 0), -90)
-        node_skybox.scale_total(10)
+        node_skybox.scale_total(25)
         return node_skybox
 
     def create(self):
         top_node = Node('top')
         mesh_trex = load_textured("Objects/trex/trex.obj")[0]
         trex_one = Node("trex_one", children=[mesh_trex])
-        top_node.add(self.skybox(), self.simple_ground(), self.tree(), self.trex(), trex_one)
+        top_node.add(self.skybox(), self.terrain(), self.tree(), self.trex(), trex_one)
         return top_node
 
 class MapCube:

@@ -5,7 +5,7 @@ from scipy import misc
 from Shader import Shader
 from Node import Node, Axis
 
-Height_Ground = 50
+Height_Ground = 20
 
 def trianglesFromImages(matrix_image, longueur_arrete = Height_Ground/10) :
     """Retourne un tableau de la taille de la matrice contenant à chaque case les
@@ -273,7 +273,7 @@ out float coefLight;
 void main() {
     gl_Position = projection * view * model * vec4(position, 1);
     height = position.y;
-    coefLight = max(dot(transpose(inverse(mat3(model)))*normales,light_direction)*1.5, 0)*0.000001;
+    coefLight = max(dot(transpose(inverse(mat3(model)))*normales,light_direction)*1.5, 0)*0.000010;
 }"""
 
 
@@ -284,7 +284,7 @@ out vec4 outColor;
 const int AMPLITUDE = %d;
 void main() {
 
-    outColor = vec4((0.40 - 0.20*height/AMPLITUDE), (0.35 + 0.10*height/AMPLITUDE), (0.10 + 0.05*height/AMPLITUDE), 0)*0.5;
+    outColor = vec4((0.40 - 0.20*height/AMPLITUDE), (0.35 + 0.10*height/AMPLITUDE), (0.10 + 0.05*height/AMPLITUDE), 0)*0.8;
     outColor += vec4((0.50 - 0.10*height/AMPLITUDE)*coefLight, (0.35 + 0.10*height/AMPLITUDE)*coefLight, (0.30 + 0.10*height/AMPLITUDE)*coefLight , 1);
 }"""%Height_Ground
 
