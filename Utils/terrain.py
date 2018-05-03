@@ -12,6 +12,7 @@ def computeNormalTriangle(coin1, coin2, coin3) :
     X = (coin2[1]-coin1[1])*(coin3[2]-coin1[2]) - (coin2[2]-coin1[2])*(coin3[1]-coin1[1])
     Y = (coin2[2]-coin1[2])*(coin3[0]-coin1[0]) - (coin2[0]-coin1[0])*(coin3[2]-coin1[2])
     Z = (coin2[0]-coin1[0])*(coin3[1]-coin1[1]) - (coin2[1]-coin1[1])*(coin3[0]-coin1[0])
+    X, Y, Z = X/ max(X, Y, Z, 1), Y/ max(X, Y, Z, 1), Z / max(X, Y, Z, 1)
     return (X, Y, Z)
 
 def generateTerrainPlat(taille, longueur_arrete = 5):
