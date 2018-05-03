@@ -8,7 +8,8 @@ from Shader import Shader
 from loader import load
 from Skinning import load_skinned
 from Textures import load_textured, TexturedPlane
-from random import randrange, randint, choice
+from random import randrange, randint, choice, random
+
 import OpenGL.GL as GL
 from terrain import Terrain
 from rocher import Rocher
@@ -75,7 +76,10 @@ class Map:
     def rochers(self):
         """ Add rochers  """
         mesh_rocher = Rocher(self.light_direction)
-        rochers = Node("all_trex", children=self.generate_nodes(mesh_rocher, 60))
+        children = self.generate_nodes(mesh_rocher, 40)
+        rochers = Node("all_trex", children=children)
+        for node in children:
+            node.scale_total(8)
         return rochers
     def trex(self):
         """ Generate the trex """
@@ -86,8 +90,11 @@ class Map:
     def tree(self):
         """ Generate trees """
         mesh_tree = Arbre(self.light_direction)
-        nodes_tree = Node("forest", children=self.generate_nodes(mesh_tree, 60))
-        # nodes_tree.scale_total(4)
+        children = self.generate_nodes(mesh_tree, 70)
+        nodes_tree = Node("forest", children=children)
+        for node in children:
+            node.scale_total(10)
+            node.translate(y=random())
         return nodes_tree
 
     def simple_ground(self):
@@ -113,6 +120,10 @@ class Map:
         node_dino.set_name(name)
         node_dino.set_acceleration(1)
         return node_dino
+
+    def meteorites():
+        meteorites = []
+        return meteorites
 
     def create(self):
         top_node = Node('top')
