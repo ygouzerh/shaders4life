@@ -52,7 +52,6 @@ class Node:
             model =  model @ self.get_trs_matrix()
         else:
             model = model @ self.transform
-
         for childes in self.children.values():
             for child in childes:
                 child.draw(projection, view, model, **param)

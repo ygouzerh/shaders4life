@@ -17,7 +17,7 @@ from transform import (translate, rotate, scale, vec, frustum, perspective,
                         identity, quaternion, quaternion_from_euler)
 from GLFWTrackball import GLFWTrackball
 from Node import Node
-from Textures import load_textured
+from Textures import load_textured, TexturedPerlinPlane
 from loader import load
 sys.path.append('./Objects')
 from Gate import Gate
@@ -99,8 +99,7 @@ def main():
     viewer = Viewer()
 
     skybox = load_textured("Objects/skybox/skybox.obj")[0]
-    viewer.add(skybox)
-
+    #viewer.add(skybox)
     viewer.add(Gate("test",1))
     viewer.run()
 
