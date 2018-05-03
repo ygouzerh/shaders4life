@@ -1,4 +1,5 @@
 import sys
+import glfw
 sys.path.append('./Objects')
 sys.path.append('./Utils')
 from transform import (translate, rotate, scale, vec, frustum, perspective,
@@ -14,6 +15,7 @@ import OpenGL.GL as GL
 from terrain import Terrain
 from rocher import Rocher
 from arbre import Arbre
+from Gate import Gate
 
 """
 Map to define all the nodes used in the world
@@ -128,15 +130,24 @@ class Map:
         meteorites = []
         return meteorites
 
+    def gate(self):
+        """ Return a gate"""
+        gate_node = Gate("gate", 1)
+        gate_node.scale_total(20)
+        gate_node.translate(y=10)
+        self.elevate(gate_node)
+        return gate_node
+
     def create(self):
         top_node = Node('top')
         # mesh_trex = load_textured("Objects/trex/trex.obj")[0]
         # trex_one = Node("trex_one", children=[mesh_trex])
         # self.elevate(trex_one)
+
         trex_player = Node('player_node', children=[self.dino_moving("player")])
         trex_player.scale_total(10)
         self.elevate(trex_player)
-        top_node.add(self.skybox(), self.terrain, trex_player, self.trex())
+        top_node.add(self.skybox(), self.terrain, trex_player, self.trex(), self.gate())
         return top_node
 
 class MapCube:
