@@ -23,7 +23,8 @@ class Map:
         self.map_width = map_width
         self.map_height = map_height
         self.map_depth = map_depth
-        self.terrain = Terrain("Objects/ground/heightmap.png", light_direction=(50000, 500, 500), translate_y=-150, translate_x=-600, translate_z=-800)
+        # self.terrain = Terrain("Objects/ground/heightmap.png", light_direction=(50000, 500, 500), translate_y=-150, translate_x=-600, translate_z=-800)
+        self.terrain = Terrain("Objects/ground/heightmap2.png", light_direction=(50000, 500, 500), translate_y=-150, translate_x=-600, translate_z=-800, scale_total=20)
 
     def elevate(self, node):
         """ Elevate the node to be on the terrain """
@@ -98,10 +99,11 @@ class Map:
         node_skybox.scale_total(25)
         return node_skybox
 
-    def dino_moving(self):
+    def dino_moving(self, name):
         """ Add moving dino """
-        mesh_dino = load_skinned("Objects/dino/Dinosaurus_walk.dae")[0]
-        node_dino = Node("player", children=[mesh_dino])
+        node_dino = load_skinned("Objects/dino/Dinosaurus_walk.dae")[0]
+        node_dino.set_name(name)
+        node_dino.set_acceleration(1)
         return node_dino
 
     def create(self):
@@ -109,7 +111,7 @@ class Map:
         mesh_trex = load_textured("Objects/trex/trex.obj")[0]
         trex_one = Node("trex_one", children=[mesh_trex])
         self.elevate(trex_one)
-        top_node.add(self.skybox(), self.terrain, self.tree(), self.dino_moving(), trex_one)
+        top_node.add(self.skybox(), self.terrain, self.tree(), Node('player_node', children=[self.dino_moving("player")]), self.dino_moving("randomDino"), trex_one)
         return top_node
 
 class MapCube:

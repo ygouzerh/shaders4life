@@ -60,6 +60,7 @@ class Node:
     def translate(self, x=0.0, y=0.0, z=0.0):
         """ Translate the node """
         self.translation_matrix = translate(x, y, z) @ self.translation_matrix
+        print("Translate")
 
     def scale(self, x, y=None, z=None):
         """ Scale the node """
@@ -101,6 +102,10 @@ class Node:
     def get_z(self):
         """ Return the z coordinates"""
         return self.translation_matrix[2][3]
+
+    def set_name(self, name):
+        """ Setter for the name """
+        self.name = name
 
 class NodeStorage:
     """ HashMap to interact easily with all the nodes """

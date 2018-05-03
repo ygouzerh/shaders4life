@@ -6,7 +6,7 @@ from Shader import Shader
 from Node import Node, Axis
 from bisect import bisect_left
 
-Height_Ground = 90
+Height_Ground = 20
 
 def trianglesFromImages(matrix_image, longueur_arrete = Height_Ground/10) :
     """Retourne un tableau de la taille de la matrice contenant à chaque case les

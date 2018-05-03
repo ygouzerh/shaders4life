@@ -100,7 +100,8 @@ class Viewer(Node):
             if key == glfw.KEY_Z: #W
                 GL.glPolygonMode(GL.GL_FRONT_AND_BACK, next(self.fill_modes))
             if key == glfw.KEY_SPACE:
-                glfw.set_time(0)
+                print("NODE : ", NodeStorage.get("player"))
+                NodeStorage.get("player").reset_time()
             if key == glfw.KEY_W:
                 self.trackball.translate_easy(0, 0, 1)
             if key == glfw.KEY_S:
