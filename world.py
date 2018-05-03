@@ -10,7 +10,7 @@ from loader import load
 from Skinning import load_skinned
 from Textures import load_textured, TexturedPlane
 from random import randrange, randint, choice, random
-
+from Keyframes import KeyFrameControlNode
 import OpenGL.GL as GL
 from terrain import Terrain
 from rocher import Rocher
@@ -83,6 +83,7 @@ class Map:
         for node in children:
             node.scale_total(8)
         return rochers
+
     def trex(self):
         """ Generate the trex """
         mesh_trex = load_textured("Objects/trex/trex.obj")[0]
@@ -101,6 +102,24 @@ class Map:
             node.scale_total(10)
             node.translate(y=random())
         return nodes_tree
+
+    def asteroids(self):
+        mesh_rocher = Rocher(self.light_direction, color=[0.8,0.2,0.2])
+        node = Node("LaFinDuMonde")
+        for i in range(4):
+            oneNode = Node('', children=[mesh_rocher])
+            oneNode.scale_total(20)
+            oneNode.translate(0,100+randint(0,5),0)
+            self.randomize_creation(oneNode, rotation_max=360, axis_rotation=(0, 1, 0), axis_translation=(1, 1, 1))
+
+            translate_keys = {0: vec(0, 1000, 0), 4: vec(0, -800, 0)}
+            rotate_keys = {0: quaternion(), 57: quaternion()}
+            scale_keys = {0: 1,7:1}
+            keynode = KeyFrameControlNode(translate_keys, rotate_keys, scale_keys, resetTime=6)
+            keynode.add(oneNode)
+            node.add(keynode)
+        return node
+
 
     def simple_ground(self):
         """ Load a simple ground """
@@ -147,7 +166,7 @@ class Map:
         trex_player = Node('player_node', children=[self.dino_moving("player")])
         trex_player.scale_total(10)
         self.elevate(trex_player)
-        top_node.add(self.skybox(), self.terrain, trex_player, self.trex(), self.gate())
+        top_node.add(self.skybox(), self.terrain, self.tree(), self.rochers(), self.asteroids(),self.trex(), trex_player, self.gate())
         return top_node
 
 class MapCube:

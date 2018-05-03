@@ -59,14 +59,25 @@ class TransformKeyFrames:
 
 class KeyFrameControlNode(Node):
     """ Place node with transform keys above a controlled subtree """
-    def __init__(self, translate_keys, rotate_keys, scale_keys, **kwargs):
+    #Reset time != 0 boucle l'animation tous les resetTime
+    def __init__(self, translate_keys, rotate_keys, scale_keys, resetTime=0, **kwargs):
         super().__init__(**kwargs)
+        self.resetTime = None
+        if resetTime != 0:
+            self.resetTime = resetTime
+        self.passedTime = 0
         self.keyframes = TransformKeyFrames(translate_keys, rotate_keys, scale_keys)
 
     def draw(self, projection, view, model, win, **param):
         """ When redraw requested, interpolate our node transform from keys """
         if glfw.get_key(win, glfw.KEY_SPACE) == glfw.PRESS:
             glfw.set_time(0)
+            self.passedTime = 0
 
-        self.transform = self.keyframes.value(glfw.get_time())
+        currentTime = glfw.get_time() - self.passedTime
+        if self.resetTime != None and currentTime >= self.resetTime:
+            self.passedTime = glfw.get_time()
+            currentTime = 0
+
+        self.transform = self.keyframes.value(currentTime)
         super().draw(projection, view, model, **param)
