@@ -108,7 +108,7 @@ class SkinningControlNode(Node):
         self.time = glfw.get_time()
         # Accelerate the time
         self.acceleration = 1
-        self.duration = 1
+        self.duration = 1.02
 
     def draw(self, projection, view, model, time=None, acceleration=None, **param):
         """ When redraw requested, interpolate our node transform from keys """
