@@ -4,7 +4,7 @@
 ## Lancer la simulation 
 Grace a cette application, vous pouvez revivre la fin des dernier dinosaures très facilement!
 Tout ce que vous avez à faire, c'est lancer le script play, avec
-python3 play.py
+*python3 play.py*
 
 ## Les controles
 
@@ -43,4 +43,4 @@ RIGHT = Hoche la tete à droit (camera)
 
 ### Porte
 
-L/O  = Tourner porte dans un sens et dans l'autre
+L/O  = Tourner la porte dans un sens et dans l'autre
