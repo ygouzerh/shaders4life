@@ -24,7 +24,7 @@ class Map:
         self.map_height = map_height
         self.map_depth = map_depth
         # self.terrain = Terrain("Objects/ground/heightmap.png", light_direction=(50000, 500, 500), translate_y=-150, translate_x=-600, translate_z=-800)
-        self.terrain = Terrain("Objects/ground/heightmap2.png", light_direction=(50000, 500, 500), translate_y=-150, translate_x=-600, translate_z=-800, scale_total=20)
+        self.terrain = Terrain("Objects/ground/heightmap.png", light_direction=(50000, 500, 500), translate_y=-100, translate_x=-600, translate_z=-800, scale_total=8)
 
     def elevate(self, node):
         """ Elevate the node to be on the terrain """

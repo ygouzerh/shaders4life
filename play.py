@@ -41,7 +41,7 @@ class Viewer(Node):
         glfw.window_hint(glfw.OPENGL_PROFILE, glfw.OPENGL_CORE_PROFILE)
         glfw.window_hint(glfw.RESIZABLE, False)
         self.win = glfw.create_window(width, height, 'Viewer', None, None)
-        glfw.maximize_window(self.win)
+        # glfw.maximize_window(self.win)
         # self.add(self.terrain.create())
         # make win's OpenGL context current; no OpenGL calls can happen before
         glfw.make_context_current(self.win)
