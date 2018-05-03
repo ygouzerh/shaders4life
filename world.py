@@ -152,8 +152,8 @@ class Map:
     def gate(self):
         """ Return a gate"""
         gate_node = Gate("gate", 1)
-        gate_node.scale_total(20)
-        gate_node.translate(y=10)
+        gate_node.scale_total(100)
+        gate_node.translate(z=-100)
         self.elevate(gate_node)
         return gate_node
 
