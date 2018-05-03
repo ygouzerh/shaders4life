@@ -1,6 +1,12 @@
 # Rapport : Projet Graphique 3D
 
-# Objectif
+## Auteurs
+
+* Loïc SCHAMBER
+* Simon POPELIER
+* Yohan GOUZERH
+
+## Objectif
 
 Dans ce tp nous avons voulu recréer une scène très connue du crétacé : l'arrivée de terribles météorites dans le monde idyllique des dinosaures. Il se trouve qu'un dinosaure charpentier aurait également créé une porte.
 
