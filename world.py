@@ -11,6 +11,7 @@ from Textures import load_textured, TexturedPlane
 from random import randrange, randint, choice
 import OpenGL.GL as GL
 from terrain import Terrain
+from rocher import Rocher
 
 """
 Map to define all the nodes used in the world
@@ -69,6 +70,11 @@ class Map:
             self.elevate(node)
             # self.move(node)
 
+    def rochers(self):
+        """ Add rochers  """
+        mesh_rocher = Rocher(self.light_direction)
+        rochers = Node("all_trex", children=self.generate_nodes(mesh_rocher, 20))
+        return rochers
     def trex(self):
         """ Generate the trex """
         mesh_trex = load_textured("Objects/trex/trex.obj")[0]
@@ -79,7 +85,7 @@ class Map:
         """ Generate trees """
         mesh_tree = load("Objects/tree/lowpolytree.obj")[0]
         nodes_tree = Node("forest", children=self.generate_nodes(mesh_tree, 10))
-        nodes_tree.scale_total(4)
+        # nodes_tree.scale_total(4)
         return nodes_tree
 
     def simple_ground(self):
@@ -108,12 +114,12 @@ class Map:
 
     def create(self):
         top_node = Node('top')
-        mesh_trex = load_textured("Objects/trex/trex.obj")[0]
-        trex_one = Node("trex_one", children=[mesh_trex])
-        self.elevate(trex_one)
-        trex_player = Node('player_node', children=[self.dino_moving("player")])
-        self.elevate(trex_player)
-        top_node.add(self.skybox(), self.terrain, self.tree(), trex_player, self.dino_moving("randomDino"), trex_one)
+        # mesh_trex = load_textured("Objects/trex/trex.obj")[0]
+        # trex_one = Node("trex_one", children=[mesh_trex])
+        # self.elevate(trex_one)
+        # trex_player = Node('player_node', children=[self.dino_moving("player")])
+        # self.elevate(trex_player)
+        top_node.add(self.skybox(), self.terrain, self.tree(), self.rochers())
         return top_node
 
 class MapCube:
