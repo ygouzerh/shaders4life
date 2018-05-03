@@ -12,13 +12,15 @@ class Node:
     """ Scene graph transform and parameter broadcast node """
     number_subnodes = 0
     def __init__(self, name='', transform=None, children=(), \
-                translation_matrix=translate(), scale_matrix=scale(1), rotation_quaternion=quaternion(), axe=False, \
+                translation_matrix=translate(), scale_matrix=scale(1), rotation_quaternion=quaternion(), axe=False,
+                height_ground=0, \
                  **param):
         # Set all the arguments
         self.transform, self.param, self.name, \
         self.translation_matrix, self.scale_matrix, self.rotation_quaternion = \
         transform, param, name, translation_matrix, scale_matrix, rotation_quaternion
         self.children = defaultdict(list)
+        self.height_ground = height_ground
         self.add(*children)
         if(axe):
             self.add(Axis())# Fait bugger le skinning
@@ -38,18 +40,21 @@ class Node:
             self.children[name].append(child)
             Node.number_subnodes += 1
 
+    def set_height_ground(self, height_ground):
+        """ Setter for height ground """
+        self.height_ground = height_ground
+
     def draw(self, projection, view, model, **param):
         """ Recursive draw, passing down named parameters & model matrix. """
         # merge named parameters given at initialization with those given here
         param = dict(param, **self.param)
         if(self.transform is None):
-            matrix_trs = self.translation_matrix @ quaternion_matrix(self.rotation_quaternion) @ self.scale_matrix
-            model =  model @ matrix_trs
+            model =  model @ self.get_trs_matrix()
         else:
             model = model @ self.transform
-
-        for child in self.children.values():
-            child[0].draw(projection, view, model, **param)
+        for childes in self.children.values():
+            for child in childes:
+                child.draw(projection, view, model, **param)
 
     def translate(self, x=0.0, y=0.0, z=0.0):
         """ Translate the node """
@@ -59,6 +64,10 @@ class Node:
         """ Scale the node """
         self.scale_matrix = scale(x, y, z) @ self.scale_matrix
 
+    def scale_total(self, value):
+        """ Wrapper for min or max all the shape """
+        self.scale(value, value, value)
+
     def rotate(self, axis=(1., 0., 0.), angle=0.0, radians=None):
         """ Rotate the node : warning, it's not using quaternion """
         # TODO : Verify the order of the multiplication
@@ -67,6 +76,34 @@ class Node:
     def set_global_position(self, x=0.0, y=0.0, z=0.0):
         """ Reset global position """
         self.translation_matrix = translate(x, y , z)
+
+    def set_global_rotation(self, axis=(1., 0., 0.), angle=0.0, radians=None):
+        """ Reset global rotation """
+        self.rotation_quaternion = quaternion_from_axis_angle(axis, angle, radians)
+
+    def set_global_scale(self, x, y=None, z=None):
+        """ Reset global scale """
+        self.scale_matrix = scale(x, y, z)
+
+    def get_trs_matrix(self):
+        """ Get TRS matrix """
+        return translate(0, self.height_ground, 0) @ self.translation_matrix @ quaternion_matrix(self.rotation_quaternion) @ self.scale_matrix
+
+    def get_x(self):
+        """ Return the x coordinates """
+        return self.translation_matrix[0][3]
+
+    def get_y(self):
+        """ Return the y coordinates"""
+        return self.translation_matrix[1][3]
+
+    def get_z(self):
+        """ Return the z coordinates"""
+        return self.translation_matrix[2][3]
+
+    def set_name(self, name):
+        """ Setter for the name """
+        self.name = name
 
 class NodeStorage:
     """ HashMap to interact easily with all the nodes """
@@ -92,15 +129,15 @@ class NodeStorage:
         return NodeStorage.nodes.get(name)
 
 class RotationControlNode(Node):
-    def __init__(self, key_up, key_down, axis, angle=0, **param):
+    def __init__(self, key_up, key_down, axis, angle=0, speed=1, **param):
         super().__init__(**param)   # forward base constructor named arguments
-        self.angle, self.axis = angle, axis
+        self.angle, self.axis,self.speed = angle, axis,speed
         self.key_up, self.key_down = key_up, key_down
 
     def draw(self, projection, view, model, win=None, **param):
         assert win is not None
-        self.angle += 2 * int(glfw.get_key(win, self.key_up) == glfw.PRESS)
-        self.angle -= 2 * int(glfw.get_key(win, self.key_down) == glfw.PRESS)
+        self.angle += self.speed * int(glfw.get_key(win, self.key_up) == glfw.PRESS)
+        self.angle -= self.speed * int(glfw.get_key(win, self.key_down) == glfw.PRESS)
         self.transform = rotate(self.axis, self.angle)
 
         # call Node's draw method to pursue the hierarchical tree calling

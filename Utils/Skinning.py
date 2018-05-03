@@ -104,17 +104,43 @@ class SkinningControlNode(Node):
         super().__init__(**kwargs)
         self.keyframes = TransformKeyFrames(*keys) if keys[0] else None
         self.world_transform = identity()
+        # Local time
+        self.time = glfw.get_time()
+        # Accelerate the time
+        self.acceleration = 1
+        self.duration = 1.02
 
-    def draw(self, projection, view, model, **param):
+    def draw(self, projection, view, model, time=None, acceleration=None, **param):
         """ When redraw requested, interpolate our node transform from keys """
-        if self.keyframes:  # no keyframe update should happens if no keyframes
-            self.transform = self.keyframes.value(glfw.get_time())
+        # Take the time of the parent or himself if
+        # he hasn't a parent has a SkinningControlNode
+        if time != None:
+            time_used = time
+        else:
+            time_used = self.time
+        # Idem for the acceleration
+        if acceleration != None:
+            acceleration_used = acceleration
+        else:
+            acceleration_used = self.acceleration
+        if self.keyframes:  # no keyframe update should happens if no keyframe
+            #  TODO : The function with the animation doesn't work
+            self.transform = self.keyframes.value(glfw.get_time()-acceleration_used*time_used)
 
         # store world transform for skinned meshes using this node as bone
         self.world_transform = model @ self.transform
 
         # default node behaviour (call children's draw method)
-        super().draw(projection, view, model, **param)
+        super().draw(projection, view, model, time=time_used, acceleration=acceleration_used, **param)
+
+    def reset_time(self):
+        """ Reset the time of the dino """
+        if(glfw.get_time()-self.time > self.duration):
+            self.time = glfw.get_time()
+
+    def set_acceleration(self, acceleration):
+        """ Setter for the acceleration """
+        self.acceleration = acceleration
 
 
 # -------------- Deformable Cylinder Mesh  ------------------------------------
