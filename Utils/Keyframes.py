@@ -29,6 +29,9 @@ class KeyFrames:
         # in self.values, using the initially stored self.interpolate function
         return self.interpolate(self.values[index-1], self.values[index], (time-self.times[index-1])/(self.times[index]-self.times[index-1]))
 
+    def get_max_time(self):
+        """ Return the max of the time """
+        return max(self.times)
 
 
 
@@ -49,6 +52,10 @@ class TransformKeyFrames:
         R = quaternion_matrix(self.rotate_keys.value(time))
         S = scale(self.scale_keys.value(time))
         return T@R@S
+
+    def get_duration(self):
+        """ Get the duration of the animation """
+        return max([self.translation_keys.get_max_time(), self.rotate_keys.get_max_time(), self.scale_keys.get_max_time()])
 
 class KeyFrameControlNode(Node):
     """ Place node with transform keys above a controlled subtree """

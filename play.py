@@ -117,25 +117,26 @@ class Viewer(Node):
                 self.trackball.rotate_easy((1, 0, 0), -2)
             if key == glfw.KEY_RIGHT:
                 self.trackball.rotate_easy((1, 0, 0), 2)
-            if key == glfw.KEY_B:
-                player = NodeStorage.get("player")
-                player.transform = self.trackball.view_matrix()
             if key == glfw.KEY_N:
                 self.trackball.reset_rotation()
             if key == glfw.KEY_M:
                 self.trackball.reset_hard()
             if key == glfw.KEY_Y:
-                NodeStorage.get("player_node").translate(0, 0, -0.5)
+                NodeStorage.get("player_node").translate(0, 0, -1)
                 self.terrain.elevate(NodeStorage.get("player_node"))
+                NodeStorage.get("player").reset_time()
             if key == glfw.KEY_G:
-                NodeStorage.get("player_node").rotate((0, 1, 0), -2)
+                NodeStorage.get("player_node").translate(-1, 0, 0)
                 self.terrain.elevate(NodeStorage.get("player_node"))
+                NodeStorage.get("player").reset_time()
             if key == glfw.KEY_H:
-                NodeStorage.get("player_node").translate(0, 0, 0.5)
+                NodeStorage.get("player_node").translate(0, 0, 1)
                 self.terrain.elevate(NodeStorage.get("player_node"))
+                NodeStorage.get("player").reset_time()
             if key == glfw.KEY_J:
-                NodeStorage.get("player_node").rotate((0, 1, 0), 2)
+                NodeStorage.get("player_node").translate(1, 0, 0)
                 self.terrain.elevate(NodeStorage.get("player_node"))
+                NodeStorage.get("player").reset_time()
 
     def set_terrain(self, terrain):
         """
