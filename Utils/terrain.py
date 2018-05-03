@@ -131,7 +131,6 @@ class Terrain(Node):
         self.vertex_array = VertexArray(attributes = [self.terrain_array, self.normales])
         self.shader = Shader(TERRAIN_VERT, TERRAIN_FRAG)
         self.light_direction = light_direction
-        self.add(Axis())
         self.translation_y = translate_y
         self.scale = scale_total
 
