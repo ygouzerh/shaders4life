@@ -2,12 +2,11 @@
 
 # Objectif
 
-Dans ce tp nous avons voulus recréer une scène très connue du crétacé : les arrivés de terribles
-météorites dans le monde idyllique des dinosaures
+Dans ce tp nous avons voulu recréer une scène très connue du crétacé : l'arrivée de terribles météorites dans le monde idyllique des dinosaures. Il se trouve qu'un dinosaure charpentier aurait également créé une porte.
 
 ## Caméra
-Pour controler la caméra et ainsi se déplacer dans le monde, nous avons 
-récupéré la trackball et ajouté des fonctions qui permettent de la translater sur tous les axes et 
+Pour contrôler la caméra et ainsi se déplacer dans le monde, nous avons
+récupéré la trackball et ajouté des fonctions qui permettent de la translater sur tous les axes et
 de la tourner. La translation fonctionne bien, cependant la rotation n'est possible que autour de l'origine
 sur l'axe y. Réussir à effectuer cette rotation nous permettrait de suivre un dinosaure par exemple.
 
@@ -15,11 +14,13 @@ sur l'axe y. Réussir à effectuer cette rotation nous permettrait de suivre un 
 
 ### Dinosaures
 
-Nous avons utilisé le modèle animé du tp7 ainsi qu'un modèle de trex fixe téléchargé.
-Sur les trex nous avons appliqué une texture.
+Nous avons utilisé le modèle animé du tp7 ainsi qu'un modèle de T-rex fixe téléchargé.
+Sur le T-rex nous avons appliqué une texture.
 Sur le dinosaure animé, dès que nous appuyons sur une touche qui peut déplacer, nous vérifions si le cycle d'animation
 précédent est terminé. Si oui, il reset l'offset dédié au noeud, sinon il ne fait rien, pour avoir une animation
 continue et qui s'arrête quand le dinosaure s'arrête.
+Le dinosaure avance avec les touches : "y", "g", "h" et "j".
+
 
 ### Rochers
 
@@ -36,7 +37,7 @@ Pour ce qui est des normales et donc de l'éclairage, nous avons appliqué le m�
 
 ### Arbres
 
-Dans le processus de création de rochers, nous nous sommes aperçus que la classe créée permettrait également à quelques modifications près de créer une masse de feuilles.
+Dans le processus de création de rochers, nous nous sommes aperçus que la classe créée permettrait également à quelques modifications près de simuler une masse de feuilles.
 
 Les paramètres que nous avons rajouté au rochers pour en faire une masse de feuilles plus réaliste sont nombreux mais consiste beaucoup à mettre des bornes aux longueurs des arrêtes générées au fur et à mesure ainsi qu'à choisir le nombre d'itération de la première étape de l'algorithme décrit précédemment.
 
@@ -44,13 +45,15 @@ Nous en avons profité pour créer également des arbres procéduraux. Cela cons
 
 Le tronc est ensuite éclairé de la même manière que la masse de feuilles.
 
+On peut déplorer que tous les arbres et rochers du terrains, bien que générés aléatoirement, soient les mêmes par manque de temps. Une correction minime aurait été suffisante pour diversifier l'environnement.
+
 ### Porte
 
-Nous avons ajouté une porte contrôlable au clavier. Elle s'ouvre grâce aux flèches et pivote par rotation controle node. Elle est symétrique et comporte donc 2 cylindres pour l'axe de rotation et deux pavés aplatis pour la porte en elle-même.
+Nous avons ajouté une porte contrôlable au clavier. Elle s'ouvre grâce aux touches "l" et "p" et pivote par rotation contrôle node. Elle est symétrique et comporte donc 2 cylindres pour l'axe de rotation et deux pavés aplatis pour la porte en elle-même.
 
 ### Météorites
 
-Pour implémenter un objet avec des keyframes, nous avons pensé faire des météorites qui tomberaient simplement depuis un endroit aléatoire dans le ciel, jusqu'au sol. Il suffit de donner 2 keyframes pour le point d'apparition et le point de chute (point de chute qui peut être sous la map). De plus, nous avons modifié la classe KeyframeControlNode afin de pouvoir spécifier une durée apres laquelle l'animation recommance, afin de pouvoir profiter de la pluie de météorites en continue
+Pour implémenter un objet avec des keyframes, nous avons pensé faire des météorites qui tomberaient simplement depuis un endroit aléatoire dans le ciel, jusqu'au sol. Il suffit de donner 2 keyframes pour le point d'apparition et le point de chute (point de chute qui peut être sous la map). De plus, nous avons modifié la classe KeyframeControlNode afin de pouvoir spécifier une durée après laquelle l'animation recommence, afin de pouvoir profiter de la pluie de météorites en continu.
 
 ## Terrain
 
@@ -80,12 +83,12 @@ Pour ce qui concerne les ombres du terrain. Pour des raisons de facilité, nous 
 
 Pour positionner les objets du terrain, notre classe Map
 s'occupe de générer tous les nodes de la map.
-Nous avons modifié les nodes pour contenir trois matrices T/R/S au lieu 
+Nous avons modifié les nodes pour contenir trois matrices T/R/S au lieu
 d'une matrice transform, permettant d'être plus flexible, de récupérer les opérations
-effectués, de supprimer des translations, rotations,...
-Cela nous a permis dans la classe node une api qui nous permet d'effectuer des traitements sur l'objet de type translate/rotate/scale (api relatif à la position ou global dans la scène)
+effectuées, de supprimer des translations, rotations,...
+Cela nous a permis de réaliser dans la classe node, une api qui nous permet d'effectuer des traitements sur l'objet de type translate/rotate/scale (api relatif à la position ou global dans la scène)
 La plupart des éléments, comme les arbres et les rochers sont générés aléatoirement sur
-la map grâce à cette api. 
+la map grâce à cette api.
 
 #### Mettre sur le terrain à la bonne hauteur
 
@@ -94,12 +97,12 @@ du point le plus proche. Nous utilisons une hashmap avec comme clef la position 
 pour réaliser cette recherche en O(1) au lieu de reparcourir à chaque fois toutes les vertex du terrain.
 Ensuite, nous mettons à jour la position de l'objet avec cette hauteur.
 Pour être plus fidèle et ne pas dépendre du nombre de vertex, nous pourrions utiliser un
-algo d'intersection du plan (triangle formé par les 3 vertex les plus proches) et de la droite y pour récupérer cette hauteur
+algorithme d'intersection du plan (triangle formé par les 3 vertex les plus proches) et de la droite y pour récupérer cette hauteur.
 
 ## Skybox
 
 Notre skybox est un grand cube sur lequel nous avons appliqué une texture de ciel
-sur les faces intérieures
+sur les faces intérieures.  
 
 ## Textures
 
