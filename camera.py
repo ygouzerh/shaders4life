@@ -100,7 +100,8 @@ class Viewer(Node):
             if key == glfw.KEY_Z: #W
                 GL.glPolygonMode(GL.GL_FRONT_AND_BACK, next(self.fill_modes))
             if key == glfw.KEY_SPACE:
-                glfw.set_time(0)
+                print("NODE : ", NodeStorage.get("player"))
+                NodeStorage.get("player").reset_time()
             if key == glfw.KEY_W:
                 self.trackball.translate_easy(0, 0, 1)
             if key == glfw.KEY_S:
@@ -118,18 +119,18 @@ class Viewer(Node):
             if key == glfw.KEY_RIGHT:
                 self.trackball.rotate_easy((1, 0, 0), 2)
             if key == glfw.KEY_B:
-                trex_one = NodeStorage.get("trex_one")
-                trex_one.transform = self.trackball.view_matrix()
+                player = NodeStorage.get("player")
+                player.transform = self.trackball.view_matrix()
             if key == glfw.KEY_N:
                 self.trackball.reset_rotation()
             if key == glfw.KEY_M:
                 self.trackball.reset_hard()
             if key == glfw.KEY_E:
-                NodeStorage.get("trex_one").translate(0, 0, -0.5)
-                self.terrain.elevate(NodeStorage.get("trex_one"))
+                NodeStorage.get("player").translate(0, 0, -0.5)
+                self.terrain.elevate(NodeStorage.get("player"))
             if key == glfw.KEY_R:
-                NodeStorage.get("trex_one").rotate((0, 0, 1), 2)
-                self.terrain.elevate(NodeStorage.get("trex_one"))
+                NodeStorage.get("player").rotate((0, 0, 1), 2)
+                self.terrain.elevate(NodeStorage.get("player"))
 
     def set_terrain(self, terrain):
         """
@@ -146,7 +147,6 @@ def main():
     viewer = Viewer(map_width=60, map_height=60, map_depth=60)
     viewer.add()
     viewer.run()
-
 
 if __name__ == '__main__':
     glfw.init()                # initialize window system glfw

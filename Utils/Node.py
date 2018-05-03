@@ -102,6 +102,10 @@ class Node:
         """ Return the z coordinates"""
         return self.translation_matrix[2][3]
 
+    def set_name(self, name):
+        """ Setter for the name """
+        self.name = name
+
 class NodeStorage:
     """ HashMap to interact easily with all the nodes """
     nodes = dict()
