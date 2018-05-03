@@ -149,7 +149,7 @@ class Viewer(Node):
 # -------------- main program and scene setup --------------------------------
 def main():
     """ create a window, add scene objects, then run rendering loop """
-    viewer = Viewer(map_width=60, map_height=60, map_depth=60)
+    viewer = Viewer(map_width=400, map_height=400, map_depth=400)
     viewer.add()
     viewer.run()
 

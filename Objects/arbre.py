@@ -14,7 +14,7 @@ from loader import load
 from transform import translate, scale
 
 def createTronc(arrivee) :
-    cylindre = load("Objects/cylinder.obj")
+    cylindre = load("Utils/cylinder.obj")
 
 
 ARBRE_VERT = """#version 330 core
@@ -72,7 +72,7 @@ class Arbre(Node):
     def __init__(self, lightDirection):
         super().__init__()
         # Tronc
-        cylindre = load("Objects/cylinder.obj")[0]
+        cylindre = load("Utils/cylinder.obj")[0]
         cylindre.shader = Shader(TRONC_VERT, TRONC_FRAG)
         # self.add(cylindre)
         # self.add(Rocher(lightDirection))

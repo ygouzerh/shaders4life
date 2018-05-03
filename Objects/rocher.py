@@ -186,7 +186,7 @@ in float coefLight;
 in vec3 color_coef;
 
 void main() {
-    outColor = vec4(color_coef[0]/4 + color_coef[0]*coefLight, color_coef[1]/4 + color_coef[1]*coefLight, color_coef[2]/4 + color_coef[2]*coefLight, 1);
+    outColor = vec4(color_coef[0]/2 + color_coef[0]*coefLight, color_coef[1]/2 + color_coef[1]*coefLight, color_coef[2]/2 + color_coef[2]*coefLight, 1);
 }"""
 
 

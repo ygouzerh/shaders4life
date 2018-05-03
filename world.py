@@ -12,6 +12,7 @@ from random import randrange, randint, choice
 import OpenGL.GL as GL
 from terrain import Terrain
 from rocher import Rocher
+from arbre import Arbre
 
 """
 Map to define all the nodes used in the world
@@ -74,7 +75,7 @@ class Map:
     def rochers(self):
         """ Add rochers  """
         mesh_rocher = Rocher(self.light_direction)
-        rochers = Node("all_trex", children=self.generate_nodes(mesh_rocher, 20))
+        rochers = Node("all_trex", children=self.generate_nodes(mesh_rocher, 60))
         return rochers
     def trex(self):
         """ Generate the trex """
@@ -84,8 +85,8 @@ class Map:
 
     def tree(self):
         """ Generate trees """
-        mesh_tree = load("Objects/tree/lowpolytree.obj")[0]
-        nodes_tree = Node("forest", children=self.generate_nodes(mesh_tree, 10))
+        mesh_tree = Arbre(self.light_direction)
+        nodes_tree = Node("forest", children=self.generate_nodes(mesh_tree, 60))
         # nodes_tree.scale_total(4)
         return nodes_tree
 
