@@ -127,15 +127,19 @@ class Viewer(Node):
             if key == glfw.KEY_Y:
                 NodeStorage.get("player_node").translate(0, 0, -0.5)
                 self.terrain.elevate(NodeStorage.get("player_node"))
+                NodeStorage.get("player").reset_time()
             if key == glfw.KEY_G:
                 NodeStorage.get("player_node").rotate((0, 1, 0), -2)
                 self.terrain.elevate(NodeStorage.get("player_node"))
+                NodeStorage.get("player").reset_time()
             if key == glfw.KEY_H:
                 NodeStorage.get("player_node").translate(0, 0, 0.5)
                 self.terrain.elevate(NodeStorage.get("player_node"))
+                NodeStorage.get("player").reset_time()
             if key == glfw.KEY_J:
                 NodeStorage.get("player_node").rotate((0, 1, 0), 2)
                 self.terrain.elevate(NodeStorage.get("player_node"))
+                NodeStorage.get("player").reset_time()
 
     def set_terrain(self, terrain):
         """

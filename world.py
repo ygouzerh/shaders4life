@@ -26,8 +26,8 @@ class Map:
         self.map_height = map_height
         self.map_depth = map_depth
         self.light_direction = (50000, 500, 500)
-        # self.terrain = Terrain("Objects/ground/heightmap.png", light_direction=(50000, 500, 500), translate_y=-150, translate_x=-600, translate_z=-800)
-        self.terrain = Terrain("Objects/ground/heightmap.png", light_direction=self.light_direction, translate_y=-100, translate_x=-600, translate_z=-800, scale_total=8)
+        # self.terrain = Terrain("Objects/ground/heightmap_squared.png", light_direction=self.light_direction, translate_y=-100, translate_x=-600, translate_z=-800, scale_total=8)
+        self.terrain = Terrain("Objects/ground/fast.png", light_direction=self.light_direction, translate_y=-100, translate_x=-600, translate_z=-800, scale_total=8)
 
     def elevate(self, node):
         """ Elevate the node to be on the terrain """
@@ -119,9 +119,9 @@ class Map:
         # mesh_trex = load_textured("Objects/trex/trex.obj")[0]
         # trex_one = Node("trex_one", children=[mesh_trex])
         # self.elevate(trex_one)
-        # trex_player = Node('player_node', children=[self.dino_moving("player")])
-        # self.elevate(trex_player)
-        top_node.add(self.skybox(), self.terrain, self.tree(), self.rochers())
+        trex_player = Node('player_node', children=[self.dino_moving("player")])
+        self.elevate(trex_player)
+        top_node.add(self.skybox(), self.terrain, trex_player)
         return top_node
 
 class MapCube:
