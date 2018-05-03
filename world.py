@@ -111,7 +111,9 @@ class Map:
         mesh_trex = load_textured("Objects/trex/trex.obj")[0]
         trex_one = Node("trex_one", children=[mesh_trex])
         self.elevate(trex_one)
-        top_node.add(self.skybox(), self.terrain, self.tree(), Node('player_node', children=[self.dino_moving("player")]), self.dino_moving("randomDino"), trex_one)
+        trex_player = Node('player_node', children=[self.dino_moving("player")])
+        self.elevate(trex_player)
+        top_node.add(self.skybox(), self.terrain, self.tree(), trex_player, self.dino_moving("randomDino"), trex_one)
         return top_node
 
 class MapCube:

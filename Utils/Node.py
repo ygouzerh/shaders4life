@@ -60,7 +60,6 @@ class Node:
     def translate(self, x=0.0, y=0.0, z=0.0):
         """ Translate the node """
         self.translation_matrix = translate(x, y, z) @ self.translation_matrix
-        print("Translate")
 
     def scale(self, x, y=None, z=None):
         """ Scale the node """
